@@ -1,0 +1,100 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+
+<style>
+  body{
+    background-color: honeydew;
+  }
+  .main{
+    background-color: white;
+    margin-top: 7%;
+    padding: 2%;
+    box-shadow:2px 2px 2px 2px rgb(162, 21, 218);
+  }
+  h1{
+    color: blue;
+
+  }
+  .para1{
+    color: dodgerblue;
+  }
+  ul {
+    list-style-type: none;
+  }
+  a{
+    text-decoration: none;
+  }
+  ul a{
+    display: inline-block;
+  background-color: dodgerblue;
+  color: white ;
+  padding: 10px;
+  font-size: 20px;
+  border: 2px solid dodgerblue ;
+  border-radius: 222px;
+  margin-left: 30%;
+  }
+  form{
+    color: blue;
+  }
+  input{
+    text-align: center;
+  }
+  button{
+    border: none;
+    border: dodgerblue 2px solid;
+    padding: 7px;
+    background-color: dodgerblue;
+    color: white;
+    border-radius: 20px;
+    margin-bottom: 2.5%;
+  }
+
+</style>
+<div class="main">
+
+<h1>{% trans "Sign In Using Google" %}</h1>
+
+{% get_providers as socialaccount_providers %}
+
+{% if socialaccount_providers %}
+<p class='para1'>
+  you can sign up using your google account click the button below:
+</p>
+
+<div class="socialaccount_ballot">
+
+  <ul class="socialaccount_providers">
+    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+  </ul>
+
+
+</div>
+
+{% include "socialaccount/snippets/login_extra.html" %}
+
+{% else %}
+<p>{% blocktrans %}If you have not created an account yet, then please
+<a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+{% endif %}
+
+<form class="login" method="POST" action="{% url 'account_login' %}">
+  {% csrf_token %}
+  {{ form.as_p }}
+  {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+  {% endif %}
+  <button class="primaryAction" type="submit">{% trans "Sign In" %}</button>
+</form>
+
+<p style="text-align: center;"><a style="color:green;"href="{% url 'account_signup' %}">Create a new account</a></p>
+
+</div>
+
+{% endblock %}
